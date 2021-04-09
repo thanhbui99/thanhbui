@@ -1,0 +1,84 @@
+<div xmlns:th="http://www.thymeleaf.org">
+<header
+        th:style="'background-image: url(/img/header.png);'">
+    <div class="wrapper-9">
+        <a href="/">
+            <div class="logo" th:style="'background-image:url(https://f39-zpg.zdn.vn/2835104233986896887/77c4894d367fc5219c6e.jpg); background-repeat: no-repeat; background-size: cover;background-size: contain;'">
+
+            </div>
+        </a>
+        <div class="container">
+            <form role="search" method="get" class="search-form form" action="">
+                <label>
+                    <span class="screen-reader-text">Tìm : tên phim, đạo diễn, diễn viên</span>
+                    <input type="search" class="search-field"
+                           placeholder="Tìm : tên phim, đạo diễn, diễn viên"
+                           value=""
+                           name="search"
+                           title="" />
+                </label>
+                <input type="submit" class="search-submit button" value="&#xf002" />
+            </form>
+        </div>
+    </div>
+</header>
+<div class="wrapper" >
+    <nav class="nav">
+        <ul class="nav__menu">
+            <li class="nav__item">
+                <a href="#" class="nav__link">THE MOVIEX</a>
+            </li>
+            <li class="nav__item">
+                <a href="#" class="nav__link">THỂ LOẠI</a>
+                <div class="nav__dropdown">
+                    <ul>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim hành động</a></li>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim võ thuật</a></li>
+                        <li class="nav__item"><a href="#" class="nav__link">Phim thần thoại</a></li>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim hành động</a></li>
+                    </ul>
+                    <ul>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim hanh dong</a></li>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim vo thuat</a></li>
+                        <li class="nav__item"><a href="#" class="nav__link">Phim than thoai</a></li>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim hành động</a></li>
+                    </ul>
+                    <ul>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim hanh dong</a></li>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim vo thuat</a></li>
+                        <li class="nav__item"><a href="#" class="nav__link">Phim than thoai</a></li>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim hành động</a></li>
+                    </ul>
+                    <ul>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim hanh dong</a></li>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim vo thuat</a></li>
+                        <li class="nav__item"><a href="#" class="nav__link">Phim than thoai</a></li>
+                        <li class="nav__item"><a class="nav__link" href="#">Phim hành động</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav__item">
+                <a href="#" class="nav__link">QUỐC GIA</a>
+            </li>
+            <li class="nav__item">
+                <a href="/phim-le" class="nav__link">PHIM LẺ</a>
+            </li>
+            <li class="nav__item">
+                <a href="#" class="nav__link">PHIM BỘ</a>
+            </li>
+            <li class="nav__item">
+                <a href="#" class="nav__link">PHIM CHIẾU RẠP</a>
+            </li>
+            <li class="nav__item">
+                <a href="#" class="nav__link">PHIM THUYẾT MINH</a>
+            </li>
+            <li class="nav__item">
+                <a href="/my-movie" class="nav__link">MY MOVIE</a>
+            </li>
+            <li class="nav__item">
+                <a th:if="${#request.userPrincipal != null}" th:href="@{/logout}" class="nav__link">LOGOUT</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</div>

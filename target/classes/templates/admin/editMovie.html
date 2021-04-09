@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title> Movie Manager</title>
+    <!-- Custom fonts for this template -->
+    <link th:href="@{/css/all.min.css}" rel="stylesheet" type="text/css">
+
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+    <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+            integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V"
+            crossorigin="anonymous"
+    />
+
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+    <script src="//cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+</head>
+<style>
+    label {
+        font-weight: 600;
+        color: #555;
+    }
+</style>
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin-movie">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-chess-queen"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">Luca ADMIN</sup></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            LIST MANAGER
+        </div>
+        <!-- Nav Item - Charts -->
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/admin-movie">
+                <i class="fas fa-film"></i>
+                <span>Movies</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-user-injured"></i>
+                <span>Caster</span></a>
+        </li>
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="charts.html">-->
+        <!--                <i class="far fa-address-book"></i>-->
+        <!--                <span>Category</span></a>-->
+        <!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="charts.html">-->
+        <!--                <i class="fas fa-comments"></i>-->
+        <!--                <span>Comment</span></a>-->
+        <!--        </li>-->
+        <li class="nav-item">
+            <a class="nav-link" href="/manager-staff">
+                <i class="fas fa-user"></i>
+                <span>Staff</span></a>
+        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow" th:each="item : ${list}">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><span th:text="${item.userName}"></span></span>
+                            <img class="img-profile rounded-circle"
+                                 th:src="${item.images}">
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="/userInfo">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item"
+                               data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End of Topbar -->
+
+
+            <!-- /.container-fluid -->
+            <h2 style="margin: 20px;">Movie</h2>
+            <div class="container">
+                <form th:object="${dto}" action="#" th:action="@{/admin/admin-movie-save}" method="post">
+                    <h2 class="text-center" style="font-weight: bold;" >Chỉnh sửa phim</h2>
+                    <div class="row jumbotron">
+                        <div class="col-sm-2 form-group">
+                            <label for="id">ID Phim</label>
+                            <input type="number" class="form-control"
+                                   name="id"
+                                   th:field="*{id}"
+                                   id="id" placeholder="Enter ID." >
+                        </div>
+                        <div class="col-sm-10 form-group">
+                            <label for="content">Nội dung phim</label>
+                            <textarea type="text" class="form-control"
+                                      name="content"
+                                      th:field="*{content}"
+                                      id="content-movie" placeholder="Enter Content." required>
+                            </textarea>
+                            <script>CKEDITOR.replace('content-movie');</script>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label for="name">Tên phim</label>
+                            <input type="text" class="form-control"
+                                   name="name"
+                                   th:field="*{name}"
+                                   id="name" placeholder="Enter name." required>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label for="image">Ảnh</label>
+                            <input type="text" class="form-control"
+                                   name="image"
+                                   th:field="*{image}"
+                                   id="image" placeholder="Enter your image." required>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label for="category">Thể loại phim</label>
+                            <select id="category"
+                                    th:field="*{category}"
+                                    class="form-control browser-default custom-select">
+                                <option th:value="'PHIM_HANH_DONG'">Phim hành động </option>
+                                <option th:value="'PHIM_HAI_HUOC'">Phim hài hước</option>
+                                <option th:value="'PHIM_VIEN_TUONG'">Phim thuyết minh</option>
+                                <option th:value="'PHIM_CHINH_KICH_DRAMA'">Phim chính kịch drama</option>
+                                <option th:value="'PHIM_VO_THUAT'">Phim võ thuật</option>
+                                <option th:value="'PHIM_THAN_THOAI'">Phim thần thoại</option>
+                                <option th:value="'PHIM_CHIEN_TRANH'">Phim chiến tranh</option>
+                                <option th:value="'PHIM_GIA_DINH'">Phim gia đình</option>
+                                <option th:value="'PHIM_KINH_DI'">Phim kinh dị</option>
+                                <option th:value="'PHIM_TAM_LY'">Phim tâm lý</option>
+                                <option th:value="'PHIM_HINH_SU'">Phim hình sự</option>
+                                <option th:value="'PHIM_TAI_LIEU'">Phim tài liệu</option>
+                                <option th:value="'PHIM_HOI_HOP_GAY_CAN'">Phim hộp gay cấn</option>
+                                <option th:value="'PHIM_HOAT_HINH'">Phim hoạt hình</option>
+                                <option th:value="'PHIM_THE_THAO_AM_NHAC'">Phim thể thao âm nhạc</option>
+                                <option th:value="'PHIM_PHIEU_LUU'">Phim phiêu lưu</option>
+                                <option th:value="'PHIM_BI_AN_SIEU_NHAN'">Phim bí ẩn siêu nhân</option>
+                                <option th:value="'PHIM_TINH_CAM_LANG_MAN'">Phim tình cảm lãng mạn</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label for="author">Đạo diễn</label>
+                            <input type="text" class="form-control"
+                                   name="author"
+                                   th:field="*{author}"
+                                   id="author" placeholder="Enter your author." required>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label for="description">Mô tả phim</label>
+                            <input type="text" class="form-control"
+                                   name="description"
+                                   th:field="*{description}"
+                                   id="description" placeholder="Enter your description." required>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="country">Nước</label>
+                            <input type="text" class="form-control"
+                                   name="country"
+                                   th:field="*{country}"
+                                   id="country" placeholder="Enter your state country." required>
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label for="code">Mã code</label>
+                            <input type="text" class="form-control"
+                                   name="code"
+                                   th:field="*{code}"
+                                   id="code" placeholder="Enter your code." required>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label for="typeImage">Type-image</label>
+                            <input type="text" class="form-control"
+                                   name="typeImage"
+                                   th:field="*{typeImage}"
+                                   id="typeImage" required>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label for="Date">Ngày công chiếu</label>
+                            <input type="text"
+                                   th:field="*{showDates}"
+                                   name="date"
+                                   class="form-control" id="Date" placeholder="" required>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label for="type">Loại phim</label>
+                            <select id="type"
+                                    th:field="*{type}"
+                                    class="form-control browser-default custom-select">
+                                <option th:value="'LE'">Phim lẻ</option>
+                                <option th:value="'BO'">Phim bộ</option>
+                                <option th:value="'THUYET_MINH_LE'">Phim lẻ thuyết minh</option>
+                                <option th:value="'THUYET_MINH_BO'">Phim bộ thuyết minh</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label >Trạng thái hoàn thành</label>
+                            <input type="text" class="form-control"
+                                   name="x"
+                                   th:field="*{completionStatus}"
+                                   id="x">
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label >Năm ra mắt</label>
+                            <input type="text" class="form-control"
+                                   name="year"
+                                   th:field="*{year}"
+                                   id="year" required>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="language">Ngôn ngữ</label>
+                            <input type="text"
+                                   name="language"
+                                   th:field="*{language}"
+                                   class="form-control" id="language" placeholder="Enter Your language." required>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label for="status">Trạng thái</label>
+                            <input type="number"
+                                   name="resolution"
+                                   th:field="*{status}"
+                                   class="form-control" id="status" placeholder="Enter Your status." required>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label >Thời lượng</label>
+                            <input type="number"
+                                   th:field="*{time}"
+                                   class="form-control" name="time" id="time" required>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label for="resolution">Độ phân giải</label>
+                            <input type="number"
+                                   th:field="*{resolution}"
+                                   name="resolution" class="form-control" id="resolution" placeholder="Enter Your Resolution." required>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label for="episode" >Tập</label>
+                            <input type="number"
+                                   th:field="*{episode}"
+                                   name="episode"
+                                   class="form-control" id="episode" placeholder="Enter rate." required>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label for="isHot" >Độ hot</label>
+                            <input type="number"
+                                   th:field="*{hot}"
+                                   name="isHot"
+                                   class="form-control" id="isHot" placeholder="Enter is hot." required>
+                        </div>
+                        <div class="col-sm-9 form-group">
+                            <label for="linkMovie" >Link phim</label>
+                            <input type="text"
+                                   th:field="*{linkMovie}"
+                                   name="linkMovie"
+                                   class="form-control" id="linkMovie" placeholder="Enter link." >
+                        </div>
+                        <div class="col-sm-12 form-group mb-0">
+                            <button class="btn btn-primary float-right">Update</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Your Website 2020</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary"
+                   th:if="${#request.userPrincipal != null}" th:href="@{/logout}"
+                >Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.input-group.date').datepicker({
+        autoclose: true,
+        todayHighlight: true
+    });
+</script>
+
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/js/jquery.min.js}"></script>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<!-- <script src="vendor/jquery-easing/jquery.easing.min.js"></script> -->
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
+
+</body>
+</html>

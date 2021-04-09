@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tên phim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+
+    <link th:href="@{/css/reset.css}" href="/static/css/reset.css" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/style.css}" href="/static/css/style.css" rel="stylesheet" type="text/css" />
+
+    <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+            integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V"
+            crossorigin="anonymous"
+    />
+</head>
+<body>
+<header
+        th:style="'background-image: url(/img/header.png);'">
+    <div class="wrapper-9">
+        <a href="/">
+            <div class="logo" th:style="'background-image:url(https://f39-zpg.zdn.vn/2835104233986896887/77c4894d367fc5219c6e.jpg); background-repeat: no-repeat; background-size: cover;background-size: contain;'">
+
+            </div>
+        </a>
+        <div class="container">
+            <form role="search" method="get" class="search-form form" th:object="${obj}" th:action="@{/search}">
+                <label>
+                    <span class="screen-reader-text">Tìm : tên phim, đạo diễn, diễn viên</span>
+                    <input type="search" class="search-field"
+                           placeholder="Tìm : tên phim, đạo diễn, diễn viên"
+                           th:field="*{search}"
+                           value=""
+                           name="search"
+                           title="" />
+                </label>
+                <input type="submit" class="search-submit button" value="&#xf002" />
+            </form>
+        </div>
+    </div>
+</header>
+<div class="wrapper" >
+    <nav class="nav">
+        <ul class="nav__menu">
+            <li class="nav__item">
+                <a href="/" class="nav__link">THE MOVIEX</a>
+            </li>
+            <li class="nav__item">
+                <a href="#" class="nav__link">THỂ LOẠI</a>
+                <div class="nav__dropdown" style="z-index: 1000">
+                    <ul class="category-item" style="display: flex;flex-wrap: wrap">
+                        <li class="nav__item" style="flex-basis: 20%;" th:each="item :${CategoryMap}">
+                            <a
+                                    class="nav__link"
+                                    th:href="@{'/the-loai/'+${item['key']}}">
+                                <span th:text="${item['value']}"></span>
+                            </a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav__item">
+                <a href="#" class="nav__link">QUỐC GIA</a>
+                <div class="nav__dropdown" style="z-index: 1000">
+                    <ul class="category-item" style="display: flex;flex-wrap: wrap">
+                        <li class="nav__item" style="flex-basis: 20%;" th:each="item :${CountryMap}">
+                            <a
+                                    class="nav__link"
+                                    th:href="@{'/quoc-gia/'+${item['key']}}">
+                                <span th:text="${item['value']}"></span>
+                            </a>
+                        </li>
+                        <li class="nav__item" style="flex-basis: 20%;">
+                            <a class="nav__link">
+                                Quốc gia khác
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav__item">
+                <a href="/phim-le" class="nav__link">PHIM LẺ</a>
+                <div class="nav__dropdown" style="z-index: 1000">
+                    <ul class="category-item" style="display: flex;flex-wrap: wrap">
+                        <li class="nav__item" style="flex-basis: 20%;" th:each="item :${yearEnum}">
+                            <a
+                                    class="nav__link"
+                                    th:href="@{'/phim-le/'+${item['key']}}">
+                                <span th:text="${item['value']}"></span>
+                            </a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav__item">
+                <a href="/phim-bo" class="nav__link">PHIM BỘ</a>
+                <div class="nav__dropdown" style="z-index: 1000;min-width: 50rem" >
+                    <ul class="category-item" style="display: flex;flex-wrap: wrap">
+                        <li class="nav__item" style="flex-basis: 20%;" th:each="item :${countrySeriesMovieEnum}">
+                            <a
+                                    class="nav__link"
+                                    th:href="@{'/phim-bo/'+${item['key']}}">
+                                <span th:text="${item['value']}"></span>
+                            </a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav__item">
+                <a href="#" class="nav__link">PHIM CHIẾU RẠP</a>
+            </li>
+            <li class="nav__item">
+                <a href="#" class="nav__link">PHIM THUYẾT MINH</a>
+            </li>
+            <li class="nav__item">
+                <a href="/my-movie" class="nav__link">MY MOVIEX</a>
+            </li>
+            <li class="nav__item">
+                <a th:if="${#request.userPrincipal != null}" class="nav__link">
+                    <img th:src="${list.get(0).images}" style="display: block;border-radius: 50%" width="30" height="38">
+                </a>
+                <div class="nav__dropdown-1" style="z-index: 1000;width: 50px !important;" >
+                    <ul class="category-item">
+                        <li class="nav__item">
+                            <a class="nav__link"
+                               th:href="@{/logout}">
+                                Logout
+                            </a>
+                        </li>
+                        <li class="nav__item">
+                            <a class="nav__link"
+                               href="/userInfo">
+                                Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+</div>
+<div class="main-center" th:style="'background-image: url(/img/back.png);'">
+    <div class="menu-child1" th:style="'background-image: url(/img/back.png);'"></div>
+    <div class="menu-child2" th:style="'background-image: url(/img/back.png);'">
+        <ol class="breadcrumb" th:each="item : ${dto}">
+            <li >
+                <a title="Phim Mới ZZ" href="" style="font-size: 15px">
+                    <span style="color: #44e2ff;">The Movie</span> <span style="color: white;"> / </span>
+                </a>
+            </li>
+            <li >
+                <a  title="Phim bộ" href="phim-bo/" style="font-size: 15px">
+                    <span style="color: #44e2ff;"><span th:text="${item.typeValue}"></span>  </span><span style="color: white;"> / </span>
+                </a>
+            </li>
+            <li >
+                <a  title="Phim bộ Mỹ" href="phim-bo/us/" style="font-size: 16px">
+                    <span style="color: #44e2ff;"><span th:text="${item.country}"> </span> <span style="color: white;"> / </span>
+                </a>
+            </li>
+            <li >
+                <a  title="Phim bộ Mỹ" href="phim-bo/us/" style="font-size: 16px">
+                    <span style="color: #44e2ff;"><span th:text="${item.categoryValue}"> </span> <span style="color: white;"> / </span>
+                </a>
+            </li>
+            <li style="color: #999999;" class="active" > <span style="font-size: 15px"><span th:text="${item.name}"></span></li>
+        </ol>
+        <div class="main-sub">
+            <div class="sub-1">
+                <div class="block-wrapper cao" style="margin-top: 10px">
+                    <div>
+                        <div class="sub-detail">
+                            <div class="sub-detail-1">
+                                <div class="movie-img" th:each="item : ${dto}">
+                                    <img alt="Cánh Cụt Nhà Bloom - Penguin Bloom"
+                                         th:src="${item.image}" width="316"
+                                         height="422x">
+                                    <ul class="btn-block">
+                                        <li class="item">
+                                            <a id="btn-film-download" class="btn btn-green btn"
+                                               title="Download phim Cánh Cụt Nhà Bloom - Penguin Bloom">
+                                                Download
+                                            </a>
+                                        </li>
+                                        <li class="item">
+                                            <a id="btn-film-trailer" class="btn btn-primary btn-film-trailer"
+                                               title="Trailer Cánh Cụt Nhà Bloom - Penguin Bloom">
+                                                Trailer
+                                            </a>
+                                        </li>
+                                        <li class="item">
+                                            <a id="btn-film-watch" class="btn btn-red"
+                                               title="Xem phim Cánh Cụt Nhà Bloom - Penguin Bloom"
+                                               th:href="@{'/play-movie/'+${item.id}}"
+                                            >
+                                                Xem phim
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <span style="position: absolute;top:5%;left: 15%;"><a th:href="@{'/my-movie-add/'+${item.id}}" class="btnx"><i class="fas fa-cart-arrow-down"></i><span style="font-size: 14px"> my movie</span></a></span>
+                                </div>
+                            </div>
+                            <div class="sub-detail-2" th:each="item : ${dto}">
+                                <h1 class="movie-title">
+                                          <span class="title-1">
+                                           <a class="title-1" href="phim/cuoc-khai-quat-12189/">
+                                               <span th:text="${item.name}"></span>
+                                            </a>
+                                          </span>
+                                    <span class="title-2">
+                                        <span th:text="${item.description}"></span>
+                                          </span>
+                                </h1>
+                                <div>
+                                    <div class="top-film-week-2" style="margin-top: 10px">
+                                        <div class="right-box-content-2">
+                                            <ul class="list-top-movie-2-1 slim-scroll" id="style-1">
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        Trạng thái: <span class="p1"><span th:text="${item.completionStatus}" style="color: red"> </span></span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        Đạo diễn: <span class="p1"><span th:text="${item.author}"></span></span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        Quốc gia: <span class="p1"><span th:text="${item.country}"></span></span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        Năm: <span class="p1"><span th:text="${item.year}"></span></span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        Ngày phát hành: <span class="p1"><span th:text="${item.showDates}"></span></span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        thời lượng: <span class="p1"><span th:text="${item.time}"></span></span> phút
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        Chất lượng: <span class="p1">Bản đẹp</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        Độ phân giải: HD <span class="p1"><span th:text="${item.resolution}"></span>p</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        ngôn ngữ: <span class="p1"><span th:text="${item.language}"></span></span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        Thể loại: <span class="p1"><span th:text="${item.categoryValue}"></span></span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-top-movie-item-2">
+                                                    <div>
+                                                        Công ti SX: <span class="p1"><span th:text="${item.typeImage}"></span></span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="caster-movie-1-1">
+                                    <h3 class="movie-title">
+                                         <span class="title-11">
+                                             <a class="title-11" href="phim/cuoc-khai-quat-12189/">
+                                               Đánh giá phim
+                                             </a>
+                                          </span>
+                                    </h3>
+                                    <div class="rate">
+                                        <input type="radio" id="star5" name="rate" value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                        <input type="radio" id="star4" name="rate" value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                        <input type="radio" id="star3" name="rate" value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                        <input type="radio" id="star2" name="rate" value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                        <input type="radio" id="star1" name="rate" value="1" />
+                                        <label for="star1" title="text">1 star</label>
+                                    </div>
+                                    <br/>
+                                    <div class="text-rate">
+                                        <p class="text-wrapper">
+                                            <span >3</span>/5
+                                            (từ <span>1000</span> votes)
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="caster-movie">
+                            <h3 class="movie-title">
+                                         <span class="title-11">
+                                             <a class="title-11" href="phim/cuoc-khai-quat-12189/">
+                                                Diễn viên
+                                             </a>
+                                          </span>
+                            </h3>
+                            <span class="caster-movie-sub">
+                                         <a>Bùi thành</a>
+                                     </span>;
+                        </div>
+                        <div class="caster-movie" >
+                            <h3 class="movie-title">
+                                        <span class="title-11">
+                                            <a class="title-11" href="phim/cuoc-khai-quat-12189/">
+                                                Nội dung phim
+                                            </a>
+                                        </span>
+                            </h3>
+                            <span class="content-movie">
+                               <div th:each="item : ${dto}" class="content-movie">
+<!--                                   <span style="font-size: 13px;letter-spacing: 1px;" th:text="${item.content}"></span>-->
+                                   <span th:utext="${item.content}"></span>
+                               </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="block-wrapper cao" style="margin-top: 40px">
+                          <span class="title-11">
+                              <a class="title-11">
+                                 Bình luận về phim
+                               </a>
+                           </span>
+                    <div class="sub-comment">
+                        <div th:each="item : ${dto}">
+                            <form th:action="@{'/comment-user/'+${item.id}}" th:object="${userComment}" method="POST">
+                                <textarea class="comment"
+                                          th:field="*{content}"
+                                          name="comment" placeholder="Thêm bình luận"></textarea>
+                                <br>
+                                <input class="up-comment" type="submit" name="submit" value="Đăng">
+                            </form>
+                        </div>
+                        <div class="detail-user" th:each="item : ${listComment}">
+                            <div style="color: #111;">
+                                <div class="subb-comment">
+                                    <div class="img-comment">
+                                        <img class="img" width="47px" height="47px" th:src="${item.getAppUser().image.getObjectUrl()}" alt="">
+                                    </div>
+                                    <div class="detail-comment">
+                                        <p class="acc-comment" style="font-weight: bold"><b><span th:text="${item.getAppUser().getUserName()}"></span></b></p>
+                                        <p class="content-comment" ><span th:text="${item.content}"></span></p>
+                                        <p class="date-comment" style="font-weight: bold"><b><span th:text="${item.getPostingTime()}"></span></b></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="block-wrapper-1">
+                    <h2 class="header-list-index" style="margin-top: 0px;">
+                <span class="title-list-index">
+                    Có thể bạn cũng muốn xem
+                </span>
+                    </h2>
+                    <div class="xxx">
+                  <span class="sub-1-1">
+                      <a>
+                         <div class="block-wrapper block-2" style="width: 206px;height: 348px">
+                             <div class="movie-thumbnail ratio-box ratio-3_4">
+                                 <div>
+                                      <img src="https://i3.wp.com/image.phimmoi.net/film/12153/poster.thumb.jpg" alt="" width="206px" height="auto">
+                                 </div>
+                             </div>
+                             <div class="movie-meta">
+                                <div class="movie-title-1">Buổi Phát Sóng Kinh Hoàng</div>
+                                <span class="movie-title-2">Follow Me</span>
+                                <span class="movie-title-chap">91 phút </span>
+                                <span class="ribbon">HD-Vietsub</span>
+                              </div>
+                         </div>
+                        </a>
+                  </span>
+                        <span class="sub-1-1">
+                      <a>
+                         <div class="block-wrapper block-2" style="width: 206px;height: 348px">
+                             <div class="movie-thumbnail ratio-box ratio-3_4">
+                                 <div>
+                                      <img src="https://i3.wp.com/image.phimmoi.net/film/12153/poster.thumb.jpg" alt="" width="206px" height="auto">
+                                 </div>
+                             </div>
+                             <div class="movie-meta">
+                                <div class="movie-title-1">Buổi Phát Sóng Kinh Hoàng</div>
+                                <span class="movie-title-2">Follow Me</span>
+                                <span class="movie-title-chap">91 phút </span>
+                                <span class="ribbon">HD-Vietsub</span>
+                              </div>
+                         </div>
+                        </a>
+                  </span>
+                        <span class="sub-1-1">
+                      <a>
+                         <div class="block-wrapper block-2" style="width: 206px;height: 348px">
+                             <div class="movie-thumbnail ratio-box ratio-3_4">
+                                 <div>
+                                      <img src="https://i3.wp.com/image.phimmoi.net/film/12153/poster.thumb.jpg" alt="" width="206px" height="auto">
+                                 </div>
+                             </div>
+                             <div class="movie-meta">
+                                <div class="movie-title-1">Buổi Phát Sóng Kinh Hoàng</div>
+                                <span class="movie-title-2">Follow Me</span>
+                                <span class="movie-title-chap">91 phút </span>
+                                <span class="ribbon">HD-Vietsub</span>
+                              </div>
+                         </div>
+                        </a>
+                  </span>
+                        <span class="sub-1-1">
+                      <a>
+                         <div class="block-wrapper block-2" style="width: 206px;height: 348px">
+                             <div class="movie-thumbnail ratio-box ratio-3_4">
+                                 <div>
+                                      <img src="https://i3.wp.com/image.phimmoi.net/film/12153/poster.thumb.jpg" alt="" width="206px" height="auto">
+                                 </div>
+                             </div>
+                             <div class="movie-meta">
+                                <div class="movie-title-1">Buổi Phát Sóng Kinh Hoàng</div>
+                                <span class="movie-title-2">Follow Me</span>
+                                <span class="movie-title-chap">91 phút </span>
+                                <span class="ribbon">HD-Vietsub</span>
+                              </div>
+                         </div>
+                        </a>
+                  </span>
+                        <span class="sub-1-1">
+                      <a>
+                         <div class="block-wrapper block-2" style="width: 206px;height: 348px">
+                             <div class="movie-thumbnail ratio-box ratio-3_4">
+                                 <div>
+                                      <img src="https://i3.wp.com/image.phimmoi.net/film/12153/poster.thumb.jpg" alt="" width="206px" height="auto">
+                                 </div>
+                             </div>
+                             <div class="movie-meta">
+                                <div class="movie-title-1">Buổi Phát Sóng Kinh Hoàng</div>
+                                <span class="movie-title-2">Follow Me</span>
+                                <span class="movie-title-chap">91 phút </span>
+                                <span class="ribbon">HD-Vietsub</span>
+                              </div>
+                         </div>
+                        </a>
+                  </span>
+                        <span class="sub-1-1">
+                      <a>
+                         <div class="block-wrapper block-2" style="width: 206px;height: 348px">
+                             <div class="movie-thumbnail ratio-box ratio-3_4">
+                                 <div>
+                                      <img src="https://i3.wp.com/image.phimmoi.net/film/12153/poster.thumb.jpg" alt="" width="206px" height="auto">
+                                 </div>
+                             </div>
+                             <div class="movie-meta">
+                                <div class="movie-title-1">Buổi Phát Sóng Kinh Hoàng</div>
+                                <span class="movie-title-2">Follow Me</span>
+                                <span class="movie-title-chap">91 phút </span>
+                                <span class="ribbon">HD-Vietsub</span>
+                              </div>
+                         </div>
+                        </a>
+                  </span>
+                    </div>
+                </div>
+            </div>
+            <div class="sub-2">
+                <div class="top-film-week">
+                    <h2 class="right-box-header">
+                        <i class="fas fa-star" style="color: #FD8D00;"></i>
+                        <span> Trailer phim mới</span>
+                    </h2>
+                    <div class="right-box-content">
+                        <ul class="list-top-movie slim-scroll" id="style-1">
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                        <span style="margin-left: -22px">
+                                            <div class="rate">
+                                        <input type="radio" id="star5" name="rate" value="5" />
+                                        <label for="star5" title="text" class="star-label">5 stars</label>
+                                        <input type="radio" id="star4" name="rate" value="4" />
+                                        <label for="star4" title="text" class="star-label">4 stars</label>
+                                        <input type="radio" id="star3" name="rate" value="3" />
+                                        <label for="star3" title="text" class="star-label">3 stars</label>
+                                        <input type="radio" id="star2" name="rate" value="2" />
+                                        <label for="star2" title="text" class="star-label">2 stars</label>
+                                        <input type="radio" id="star1" name="rate" value="1" />
+                                        <label for="star1" title="text" class="star-label">1 star</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li> <li class="list-top-movie-item">
+                            <a href="#" class="theA">
+                                <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                <div class="list-top-movie-item-info">
+                                    <span class="info-vn">Da quy rung sau</span>
+                                    <span class="info-en">The Window</span>
+                                    <span class="info-view">Muc do pho bien</span>
+                                </div>
+                            </a>
+                        </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li> <li class="list-top-movie-item">
+                            <a href="#" class="theA">
+                                <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                <div class="list-top-movie-item-info">
+                                    <span class="info-vn">Da quy rung sau</span>
+                                    <span class="info-en">The Window</span>
+                                    <span class="info-view">Muc do pho bien</span>
+                                </div>
+                            </a>
+                        </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li> <li class="list-top-movie-item">
+                            <a href="#" class="theA">
+                                <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                <div class="list-top-movie-item-info">
+                                    <span class="info-vn">Da quy rung sau</span>
+                                    <span class="info-en">The Window</span>
+                                    <span class="info-view">Muc do pho bien</span>
+                                </div>
+                            </a>
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="top-film-week" style="margin-top: 40px">
+                    <h2 class="right-box-header">
+                        <i class="fas fa-star" style="color: #FD8D00;"></i>
+                        <span> Phim lẻ hot trong tuần</span>
+                    </h2>
+                    <div class="right-box-content">
+                        <ul class="list-top-movie slim-scroll" id="style-1">
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li> <li class="list-top-movie-item">
+                            <a href="#" class="theA">
+                                <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                <div class="list-top-movie-item-info">
+                                    <span class="info-vn">Da quy rung sau</span>
+                                    <span class="info-en">The Window</span>
+                                    <span class="info-view">Muc do pho bien</span>
+                                </div>
+                            </a>
+                        </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li> <li class="list-top-movie-item">
+                            <a href="#" class="theA">
+                                <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                <div class="list-top-movie-item-info">
+                                    <span class="info-vn">Da quy rung sau</span>
+                                    <span class="info-en">The Window</span>
+                                    <span class="info-view">Muc do pho bien</span>
+                                </div>
+                            </a>
+                        </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li> <li class="list-top-movie-item">
+                            <a href="#" class="theA">
+                                <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                <div class="list-top-movie-item-info">
+                                    <span class="info-vn">Da quy rung sau</span>
+                                    <span class="info-en">The Window</span>
+                                    <span class="info-view">Muc do pho bien</span>
+                                </div>
+                            </a>
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="top-film-week" style="margin-top: 40px">
+                    <h2 class="right-box-header">
+                        <i class="fas fa-star" style="color: #FD8D00;"></i>
+                        <span> Phim bộ hot trong tuần</span>
+                    </h2>
+                    <div class="right-box-content">
+                        <ul class="list-top-movie slim-scroll" id="style-1">
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li> <li class="list-top-movie-item">
+                            <a href="#" class="theA">
+                                <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                <div class="list-top-movie-item-info">
+                                    <span class="info-vn">Da quy rung sau</span>
+                                    <span class="info-en">The Window</span>
+                                    <span class="info-view">Muc do pho bien</span>
+                                </div>
+                            </a>
+                        </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li> <li class="list-top-movie-item">
+                            <a href="#" class="theA">
+                                <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                <div class="list-top-movie-item-info">
+                                    <span class="info-vn">Da quy rung sau</span>
+                                    <span class="info-en">The Window</span>
+                                    <span class="info-view">Muc do pho bien</span>
+                                </div>
+                            </a>
+                        </li>
+                            <li class="list-top-movie-item">
+                                <a href="#" class="theA">
+                                    <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                    <div class="list-top-movie-item-info">
+                                        <span class="info-vn">Da quy rung sau</span>
+                                        <span class="info-en">The Window</span>
+                                        <span class="info-view">Muc do pho bien</span>
+                                    </div>
+                                </a>
+                            </li> <li class="list-top-movie-item">
+                            <a href="#" class="theA">
+                                <div class="list-top-movie-item-thumb" style="background-image: url('https://i3.wp.com/image.phimmoi.net/film/11300/poster.small.jpg')"></div>
+                                <div class="list-top-movie-item-info">
+                                    <span class="info-vn">Da quy rung sau</span>
+                                    <span class="info-en">The Window</span>
+                                    <span class="info-view">Muc do pho bien</span>
+                                </div>
+                            </a>
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="menu-child3" th:style="'background-image: url(/img/back.png);'"></div>
+</div>
+
+<footer>
+    <div class="wrapper-footer">
+        <div class="footer-1">
+            <a href="/">
+                <div class="logo"
+                     th:style="'background-image:url(https://f20-zpg.zdn.vn/3600043924148048053/a104962ea8135b4d0202.jpg); background-repeat: no-repeat; background-size: cover;background-size: contain;'">
+                </div>
+            </a>
+        </div>
+        <div class="footer-1">
+            <h3 class="footer-nav"><a>The Movie X</a></h3>
+            <p class="footer-text"><a>Phim lẻ mới</a></p>
+            <p class="footer-text"><a>Phim bộ mới</a></p>
+            <p class="footer-text"><a>Phim chiếu rạp</a></p>
+            <p class="footer-text"><a>Phim kinh điển</a></p>
+            <p class="footer-text"><a>Phim sắp chiếu</a></p>
+        </div>
+        <div class="footer-1">
+            <h3 class="footer-nav"><a>PHIM LẺ</a></h3>
+            <p class="footer-text"><a>Phim hành động</a></p>
+            <p class="footer-text"><a>Phim kiếm hiệp</a></p>
+            <p class="footer-text"><a>Phim kinh dị </a></p>
+            <p class="footer-text"><a>Phim viễn tưởng</a></p>
+            <p class="footer-text"><a>Phim hoạy hình</a></p>
+        </div>
+        <div class="footer-1">
+            <h3 class="footer-nav"><a>PHIM BỘ</a></h3>
+            <p class="footer-text"><a>Phim bộ Hàn Quốc</a></p>
+            <p class="footer-text"><a>Phim bộ Trung Quốc</a></p>
+            <p class="footer-text"><a>Phim bộ Mỹ</a></p>
+            <p class="footer-text"><a>Phim bộ Việt Nam</a></p>
+            <p class="footer-text"><a>Phim bộ Hồng Công</a></p>
+        </div>
+        <div class="footer-1">
+            <p style="margin-top: 10px;color: #297BE5;font-size: 40px">
+                <a><i class="fab fa-facebook-square"></i>
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

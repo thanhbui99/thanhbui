@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Login</title>
+
+    <!-- Custom fonts for this template-->
+    <link th:href="@{/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+            integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V"
+            crossorigin="anonymous"
+    />
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <!--    <link href="css/sb-admin-2.min.css" rel="stylesheet">-->
+
+</head>
+
+<body class="bg-dark">
+
+<div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+        <div class="col-xl-10 col-lg-12 col-md-9">
+
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Welcome Back Member!</h1>
+                                </div>
+                                <div th:if="${#request.getParameter('error') == 'true'}"
+                                     style="color:red;margin:10px 0px;">
+                                    Login Failed!!!<br />
+                                    Reason :
+                                       <span th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}"
+                                          th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">
+                                              Static summary
+                                       </span>
+                                </div>
+                                <form class="user" name='f' th:action="@{/j_spring_security_check}" method='POST'>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control form-control-user"
+                                               id="username" aria-describedby="emailHelp"
+                                               name='username'
+                                               placeholder="Enter Username..."/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control form-control-user"
+                                               id="password"
+                                               name='password'
+                                               placeholder="Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox small">
+                                            <input type="checkbox"
+                                                   class="custom-control-input"
+                                                   name="remember-me"
+                                                   id="customCheck">
+                                            <label class="custom-control-label" for="customCheck">Remember
+                                                Me</label>
+                                        </div>
+                                    </div>
+                                    <input class="btn btn-primary btn-user btn-block" name="submit" type="submit" value="login" />
+                                </form>
+                                <hr/>
+                                <div>
+                                    <a href="/" class="btn btn-dark btn-user btn-block">
+                                        Về Trang Chủ
+                                    </a>
+                                </div>
+                                <hr>
+                                <div class="text-center">
+                                    <a class="small" href="forgot-password.html">
+                                        Forgot Password?
+                                    </a>
+                                </div>
+                                <div class="text-center">
+                                    <a class="small" th:href="@{/register-user}">
+                                        Create an Account!
+                                    </a>
+                                </div>
+                                <hr/>
+                                <hr/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap core JavaScript-->
+
+<script th:src="@{/js/jquery.min.js}"></script>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{/js/jquery.easing.min.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
+
+</body>
+
+</html>
